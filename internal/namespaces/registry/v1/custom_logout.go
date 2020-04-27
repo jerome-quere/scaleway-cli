@@ -2,7 +2,6 @@ package registry
 
 import (
 	"context"
-	"fmt"
 	"os/exec"
 	"reflect"
 
@@ -22,6 +21,7 @@ func registryLogoutCommand() *core.Command {
 You will need to have the chosen binary installed on your system and in your PATH.`,
 		Namespace: "registry",
 		Resource:  "logout",
+		NoClient:  true,
 		ArgsType:  reflect.TypeOf(registryLogoutArgs{}),
 		ArgSpecs: []*core.ArgSpec{
 			{
@@ -38,18 +38,8 @@ You will need to have the chosen binary installed on your system and in your PAT
 
 func registryLogoutRun(ctx context.Context, argsI interface{}) (i interface{}, e error) {
 	args := argsI.(*registryLogoutArgs)
-	client := core.ExtractClient(ctx)
 
-	region := args.Region.String()
-	if region == "" {
-		scwRegion, ok := client.GetDefaultRegion()
-		if !ok {
-			return nil, fmt.Errorf("no default region configured")
-		}
-		region = scwRegion.String()
-	}
-	endpoint := endpointPrefix + region + endpointSuffix
-
+	endpoint := getRegistryEndpoint(args.Region)
 	cmdArgs := []string{"logout", endpoint}
 	cmd := exec.Command(args.Program, cmdArgs...)
 	exitCode, err := core.ExecCmd(ctx, cmd)

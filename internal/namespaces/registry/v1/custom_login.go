@@ -41,16 +41,7 @@ func registryLoginRun(ctx context.Context, argsI interface{}) (i interface{}, e 
 	args := argsI.(*registryLoginArgs)
 	client := core.ExtractClient(ctx)
 
-	region := args.Region.String()
-	if region == "" {
-		scwRegion, ok := client.GetDefaultRegion()
-		if !ok {
-			return nil, fmt.Errorf("no default region configured")
-		}
-		region = scwRegion.String()
-	}
-	endpoint := endpointPrefix + region + endpointSuffix
-
+	endpoint := getRegistryEndpoint(args.Region)
 	secretKey, ok := client.GetSecretKey()
 	if !ok {
 		return nil, fmt.Errorf("could not get secret key")

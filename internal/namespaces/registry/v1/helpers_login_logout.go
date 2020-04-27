@@ -1,13 +1,13 @@
 package registry
 
+import "github.com/scaleway/scaleway-sdk-go/scw"
+
 type program string
 type programs []program
 
 const (
-	docker         = program("docker")
-	podman         = program("podman")
-	endpointPrefix = "rg."
-	endpointSuffix = ".scw.cloud"
+	docker = program("docker")
+	podman = program("podman")
 )
 
 var (
@@ -20,4 +20,8 @@ func (p programs) StringArray() []string {
 		res = append(res, string(prog))
 	}
 	return res
+}
+
+func getRegistryEndpoint(region scw.Region) string {
+	return "rg." + region.String() + ".scw.cloud"
 }
