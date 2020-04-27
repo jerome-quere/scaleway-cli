@@ -181,7 +181,6 @@ func createTestClient(t *testing.T, testConfig *TestConfig) (client *scw.Client,
 		scw.WithEnv(),
 		scw.WithUserAgent("cli-e2e-test"),
 		scw.WithDefaultOrganizationID("11111111-1111-1111-1111-111111111111"),
-		//scw.WithAuth("SCWXXXXXXXXXXXXXXXXX", "11111111-1111-1111-1111-111111111111"),
 	}
 
 	// If client is NOT an E2E client we init http recorder and load configuration.
